@@ -23,7 +23,7 @@ const sendEmail = (options) => {
     // send email
     // await transporter.sendMail(mailOptions)
 
-    transporter.sendMail(mailOptions, function(error, response){
+    transporter.sendMail(mailOptions, function(error, res){
         if(error){
             throw new LWPError('Failed to send Email', 400)
         }else{

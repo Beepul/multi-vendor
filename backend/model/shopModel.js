@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 
-const UserSchema = new mongoose.Schema({
+const shopSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "Please enter your name!"],
@@ -17,27 +17,34 @@ const UserSchema = new mongoose.Schema({
     minLength: [4, "Password should be greater than 4 characters"],
     select: false,
   },
+  role: {
+    type: String,
+    default: "seller"
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
   },
 });
 
-UserSchema.pre('save', async function(next){
+shopSchema.pre('save', async function(next){
   if(!this.isModified('password')){
     next()
   }
   this.password = await bcrypt.hash(this.password, 10)
 })
 
-UserSchema.methods.getJwtToken = function(){
+shopSchema.methods.getJwtToken = function(){
   return jwt.sign({id: this._id}, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES
   })
 }
 
-UserSchema.methods.comparePassword = async function (enteredPassword){
+shopSchema.methods.comparePassword = async function (enteredPassword){
   return await bcrypt.compare(enteredPassword, this.password)
 }
 
-module.exports = mongoose.model("User", UserSchema);
+
+const ShopModel = mongoose.model("Shop", shopSchema);
+
+module.exports = ShopModel
