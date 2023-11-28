@@ -1,3 +1,4 @@
+
 class LWPError extends Error {
     constructor(message,statusCode){
         super(message)

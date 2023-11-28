@@ -1,4 +1,5 @@
 .env 
 
 backend/node_modules
+# backend/NOTES.md
 frontend/node_modules
