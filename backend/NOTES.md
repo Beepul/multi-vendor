@@ -3,7 +3,7 @@
 ##  Table Of Content 
 
 1.  [Error Handling](#error-handling)
-    -   [Custom Error Class](#custom-error-class)
+    1.1)   [Custom Error Class](#custom-error-class)
     -   [Custom Error Middleware](custom-error-middleware)
     -   [Use of Custom Error Handler](#use-of-custom-error-handler)
 
