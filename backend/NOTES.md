@@ -1,11 +1,27 @@
 # Learnings from Multi-Vendor Project
 
-## Error Handling
-- [Custom Error Class](#custom-error-class)
-- [Error Handling for Async Functions](#error-handling-for-async-functions)
+##  Table Of Content 
+
+1.  [Error Handling](#error-handling)
+    -   [Custom Error Class](#custom-error-class)
+    -   [Custom Error Middleware](custom-error-middleware)
+    -   [Use of Custom Error Handler](#use-of-custom-error-handler)
+
+2.  [Error Handling for Async Functions](#error-handling-for-async-functions)
+
+3.  [Node Mailer](#node-mailer)
+
+4.  [Mongoose and MongoDB](#mongoose-and-mongoDB)
+    -   [Mongo DB connection](#mongo-db-connection)
+    -   [Some Knowledge about mongoose schema](#some-knowledge-about-mongoose-schema)
+        -   [Mongoose Middleware](#mongoose-middleware)
+        -   [Mongoose Custom Methods](#mongoose-custom-methods)
 
 
-##   Error Handling
+________________________________________________________________________________________________________________________
+
+
+##   [Error Handling](#error-handling)
 
 ###  [Custom Error Class](#custom-error-class) 
 -   Create new error class that extends Error class of node js 
@@ -26,7 +42,7 @@
     module.exports = LWPError
 ```
 
-###  [Custom Error Middleware](#error-handling-for-async-functions)
+###  [Custom Error Middleware](custom-error-middleware)
 -   set error.statusCode to custom statusCode or 500
 -   set error.message to custom message or 'Internal Server Error'
 -   send response with error.statusCode and message with error.message
@@ -42,7 +58,7 @@
     }
 ```
 
-### Use of Custom Error Handler 
+### [Use of Custom Error Handler](#use-of-custom-error-handler)
 ```js 
     // app.js 
 
@@ -61,7 +77,7 @@
     throw next(new LWPError(error,500))
 ```
 
-##  Error Handling for Async Functions 
+##  [Error Handling for Async Functions](#error-handling-for-async-functions) 
 ```js 
     const asyncHandler = (theFunc) => (req,res,next) => {
         Promise.resolve(theFunc(req,res, next)).catch(next)
@@ -77,7 +93,7 @@
 -   Now we wrap theFunc by Promise.resolve which will resolve any promises that where not handled inside the logic and we pass the req,res,next inside theFunc
 -   Moving on, the catch is chained with Promise, When an error is caught, it passes the error to the next middleware in the stack by invoking next(error). This ensures that the error is propagated down the middleware chain to the error-handling middleware.
 
-##  Node Mailer 
+##  [Node Mailer](#node-mailer)
 
 -   Node mailer is simply used to send mails from the backend 
 -   To use node mailer we need to install node mail using 
@@ -145,9 +161,9 @@
     module.exports = sendEmail
 ```
 
-##  Mongoose and MongoDB 
+##  [Mongoose and MongoDB](#mongoose-and-mongoDB)
 
-###  Mongo DB connection 
+###  [Mongo DB connection](#mongo-db-connection) 
 
 ```js 
     const mongoose = require('mongoose');
@@ -165,9 +181,9 @@
 
 ```
 
-###  Some Knowledge about mongoose schema
+###  [Some Knowledge about mongoose schema](#some-knowledge-about-mongoose-schema)
 
-####    Mongoose Middleware 
+####    [Mongoose Middleware](#mongoose-middleware) 
 
 -   Mongoose provides some middleware that can be very useful 
 -   Middleware of mongoose are like event handlers in normal js
@@ -191,7 +207,7 @@
 -   We are checking if the password in current doc has been modified or not, if it is not modified just skip whole procedure by calling next 
 -   If the password feild of the current doc has been modified than only hash the new password and save in db 
 
-####    Mongoose Custom Methods
+####    [Mongoose Custom Methods](#mongoose-custom-methods)
 
 -   Mongoose gives us ability to make our custom methods in each document 
 -   Custom method and attached to each document 
