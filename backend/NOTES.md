@@ -3,19 +3,19 @@
 ##  Table Of Content 
 
 1.  [Error Handling](#error-handling)
-    1.   [Custom Error Class](#custom-error-class)
-    2.   [Custom Error Middleware](custom-error-middleware)
-    3.   [Use of Custom Error Handler](#use-of-custom-error-handler)
+    -   [Custom Error Class](#custom-error-class)
+    -   [Custom Error Middleware](custom-error-middleware)
+    -   [Use of Custom Error Handler](#use-of-custom-error-handler)
 
 2.  [Error Handling for Async Functions](#error-handling-for-async-functions)
 
 3.  [Node Mailer](#node-mailer)
 
 4.  [Mongoose and MongoDB](#mongoose-and-mongoDB)
-    1.   [Mongo DB connection](#mongo-db-connection)
-    2.   [Some Knowledge about mongoose schema](#some-knowledge-about-mongoose-schema)
-        1.   [Mongoose Middleware](#mongoose-middleware)
-        2.   [Mongoose Custom Methods](#mongoose-custom-methods)
+    -   [Mongo DB connection](#mongo-db-connection)
+    -   [Some Knowledge about mongoose schema](#some-knowledge-about-mongoose-schema)
+        -   [Mongoose Middleware](#mongoose-middleware)
+        -   [Mongoose Custom Methods](#mongoose-custom-methods)
 
 
 ________________________________________________________________________________________________________________________
