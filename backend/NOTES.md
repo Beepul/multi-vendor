@@ -1,3 +1,5 @@
+#   Things I have learned during Multi-Vendor project
+
 ##   Error Handler
 
 ###  Custom Error Class 
@@ -6,11 +8,34 @@
 -   Call the constructor of the parent class (Error) using super method and pass message to it 
 -   Add a statusCode property to the custom error class
 -   Capture the stack trace for better error debugging
+```js 
+    class LWPError extends Error {
+        constructor(message,statusCode){
+            super(message)
+            this.statusCode = statusCode
+
+            Error.captureStackTrace(this, this.constructor)
+        }
+    }
+
+    module.exports = LWPError
+```
 
 ###  Custom Error Middleware 
 -   set error.statusCode to custom statusCode or 500
 -   set error.message to custom message or 'Internal Server Error'
 -   send response with error.statusCode and message with error.message
+```js 
+    module.exports = (err,req,res,next) => {
+        err.statusCode = err.statusCode || 500;
+        err.message = err.message || "Internal server Error"
+
+        res.status(err.statusCode).json({
+            success: false,
+            message: err.message
+        })
+    }
+```
 
 ### Use of Custom Error Handler 
 ```js 
@@ -53,6 +78,8 @@
 -   To use node mailer we need to install node mail using 
 ```js 
     npm install nodemailer 
+```
+```js 
     yarn add nodemailer     
 ```
 -   Import node mailer
