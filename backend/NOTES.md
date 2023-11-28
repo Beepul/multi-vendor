@@ -1,8 +1,13 @@
-#   Things I have learned during Multi-Vendor project
+# Learnings from Multi-Vendor Project
 
-##   Error Handler
+## Error Handling
+- [Custom Error Class](#custom-error-class)
+- [Error Handling for Async Functions](#error-handling-for-async-functions)
 
-###  Custom Error Class 
+
+##   Error Handling
+
+###  [Custom Error Class](#custom-error-class) 
 -   Create new error class that extends Error class of node js 
 -   Add constructor that accepts message and status code 
 -   Call the constructor of the parent class (Error) using super method and pass message to it 
@@ -21,7 +26,7 @@
     module.exports = LWPError
 ```
 
-###  Custom Error Middleware 
+###  [Custom Error Middleware](#error-handling-for-async-functions)
 -   set error.statusCode to custom statusCode or 500
 -   set error.message to custom message or 'Internal Server Error'
 -   send response with error.statusCode and message with error.message
