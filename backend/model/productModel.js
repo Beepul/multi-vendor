@@ -28,7 +28,8 @@ const productSchema = new mongoose.Schema({
     required: [true, "Please enter your product stock!"],
   },
   shopId: {
-    type: String,
+    type: mongoose.Types.ObjectId,
+    ref: 'Shop',
     required: true,
   },
   createdAt: {

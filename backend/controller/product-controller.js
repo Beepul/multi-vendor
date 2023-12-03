@@ -3,11 +3,12 @@ const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 const LWPError = require('../utils/error')
 const ShopModel = require('../model/shopModel')
 const Product = require('../model/productModel')
+const { isSeller } = require('../middleware/auth')
 
 const productRouter = express.Router()
 
 
-productRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
+productRouter.post('/create', isSeller , catchAsyncErrors(async (req,res,next) => {
     // res.send('Create product')
 
     try {
@@ -76,17 +77,15 @@ productRouter.get('/:shopId', catchAsyncErrors(async (req,res,next) => {
     }
 }))
 
-productRouter.delete('/:id', catchAsyncErrors(async (req,res,next) => {
+productRouter.delete('/:id', isSeller , catchAsyncErrors(async (req,res,next) => {
     try {
         const {id} = req.params
     
-        const product = await Product.findById(id)
+        const product = await Product.findByIdAndDelete(id)
 
         if(!product){
             return next(new LWPError(`Product with id ${id} not found`,404))
         }
-
-        await Product.findByIdAndDelete(product._id)
 
         res.status(200).json({
             success: true,

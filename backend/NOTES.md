@@ -4,7 +4,7 @@
 
 1.  [Error Handling](#error-handling)
     -   [Custom Error Class](#custom-error-class)
-    -   [Custom Error Middleware](custom-error-middleware)
+    -   [Custom Error Middleware](#custom-error-middleware)
     -   [Use of Custom Error Handler](#use-of-custom-error-handler)
 
 2.  [Error Handling for Async Functions](#error-handling-for-async-functions)
@@ -42,7 +42,7 @@ ________________________________________________________________________________
     module.exports = LWPError
 ```
 
-###  [Custom Error Middleware](custom-error-middleware)
+###  [Custom Error Middleware](#custom-error-middleware)
 -   set error.statusCode to custom statusCode or 500
 -   set error.message to custom message or 'Internal Server Error'
 -   send response with error.statusCode and message with error.message
@@ -53,7 +53,8 @@ ________________________________________________________________________________
 
         res.status(err.statusCode).json({
             success: false,
-            message: err.message
+            message: err.message,
+            stack: process.env.NODE_ENV === 'development' ? err.stack : null 
         })
     }
 ```

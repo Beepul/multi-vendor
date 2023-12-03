@@ -1,4 +1,4 @@
-const sendToken = (user,statusCode,res) => {
+const sendToken = (user,statusCode,res,tokenName='token') => {
     const token = user.getJwtToken();
 
     const options = {
@@ -8,9 +8,14 @@ const sendToken = (user,statusCode,res) => {
         secure: true
     }
 
-    res.status(statusCode).cookie('token',token,options).json({
+    res.status(statusCode).cookie(tokenName,token,options).json({
         success: true,
-        user,
+        user:{
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            createdAt: user.createdAt
+        },
         token
     })
 }

@@ -6,13 +6,13 @@ const sendToken = require('../utils/jwtToken')
 const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 const ShopModel = require('../model/shopModel')
 
-const sellerRouter = express.Router()
+const shopRouter = express.Router()
 
-const createActivationToken = (sellerData) => {
-    return jwt.sign(sellerData, process.env.JWT_SECRET, {expiresIn: "5m"})
+const createActivationToken = (shopData) => {
+    return jwt.sign(shopData, process.env.JWT_SECRET, {expiresIn: "5m"})
 }
 
-sellerRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
+shopRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
     try {
         const {name,email,password} = req.body
     
@@ -37,17 +37,17 @@ sellerRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
             return next(new LWPError('Please enter valid email address', 401))
         }
     
-        const allSeller = await ShopModel.find({email})
+        const allShops = await ShopModel.find({email})
     
-        const isEmailExists = allSeller.length > 0
+        const isEmailExists = allShops.length > 0
     
         if(isEmailExists){
-            return next(new LWPError('User with the provided email already exists', 401))
+            return next(new LWPError('Shop with the provided email already exists', 401))
         }
     
         const activationToken = createActivationToken({name,email,password})
     
-        const activationUrl = `http://localhost:8080/api/v1/seller/activation?token=${activationToken}`;
+        const activationUrl = `http://localhost:8080/api/v1/shop/activation?token=${activationToken}`;
         await sendEmail({
             email: email,
             subject: "Please Activate Your Account",
@@ -61,14 +61,14 @@ sellerRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
         })
         res.status(200).json({
             success: true,
-            message: 'Seller Activation link send'
+            message: 'Shop Activation link send'
         })
     } catch (error) {
         next(new LWPError(error,500))
     }
 }))
 
-sellerRouter.get('/activation', catchAsyncErrors( async (req,res,next) => {
+shopRouter.get('/activation', catchAsyncErrors( async (req,res,next) => {
     try {
         const {token} = req.query
     
@@ -84,24 +84,24 @@ sellerRouter.get('/activation', catchAsyncErrors( async (req,res,next) => {
             return next(new LWPError('Email address is not valid', 401))
         }
     
-        const allSeller = await ShopModel.find({email})
+        const allShops = await ShopModel.find({email})
     
-        const isEmailExists = allSeller.length > 0
+        const isEmailExists = allShops.length > 0
     
         if(isEmailExists){
-            return next(new LWPError('User with the provided email already exists', 401))
+            return next(new LWPError('Shop with the provided email already exists', 401))
         }
     
-        const sellerCreated = await ShopModel.create({ name, email, password });
+        const shopCreated = await ShopModel.create({ name, email, password });
         
     
-        sendToken(sellerCreated, 201, res)
+        sendToken(shopCreated, 201, res,'shop_token')
     } catch (error) {
         throw next(new LWPError(error, 500))
     }
 }))
 
-sellerRouter.post('/login', catchAsyncErrors(async (req,res,next) => {
+shopRouter.post('/login', catchAsyncErrors(async (req,res,next) => {
     try {
         const {email,password} = req.body
         
@@ -109,23 +109,23 @@ sellerRouter.post('/login', catchAsyncErrors(async (req,res,next) => {
             return next(new LWPError('Email and password are required', 400))
         }
 
-        const seller = await ShopModel.findOne({email}).select("+password")
+        const shop = await ShopModel.findOne({email}).select("+password")
 
-        if(!seller){
-            return next(new LWPError('Seller with the provided email not found', 404))
+        if(!shop){
+            return next(new LWPError('Shop with the provided email not found', 404))
         }
 
-        const isPasswordMatched = await seller.comparePassword(password)
+        const isPasswordMatched = await shop.comparePassword(password)
 
         if(!isPasswordMatched){
             return next(new LWPError('The provided password doesnot match', 401))
         }
 
-        sendToken(seller, 200, res)
-
+        sendToken(shop, 200, res,'shop_token')
+        
     } catch (error) {
         throw next(new LWPError(error,500))
     }
 }))
 
-module.exports = sellerRouter
+module.exports = shopRouter
