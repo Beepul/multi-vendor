@@ -1,21 +1,35 @@
-import { createReducer, createSlice } from "@reduxjs/toolkit"
+import { createReducer, createSlice } from '@reduxjs/toolkit';
 
-
-const initialState = {
-    isAuthenticated: false
+interface User {
+	_id: string;
+	name: string;
+	email: string;
 }
 
+interface UserState {
+	loading: 'idle' | 'pending' | 'succeeded' | 'failed';
+	isAuthenticated: boolean;
+	error: string | null;
+	user: User | null;
+	token: string;
+}
+
+const initialState: UserState = {
+	loading: 'idle',
+	isAuthenticated: false,
+	error: null,
+	user: null,
+	token: ''
+};
+
 const userSlice = createSlice({
-    name: 'user',
-    initialState,
-    reducers: {
-        loadUser: (state, action) => {
+	name: 'user',
+	initialState,
+	reducers: {
+		loadUser: (state, action) => {}
+	}
+});
 
-        }
-    }
-})
+export const { loadUser } = userSlice.actions;
 
-
-export const {loadUser} = userSlice.actions 
-
-export default userSlice
+export default userSlice;
