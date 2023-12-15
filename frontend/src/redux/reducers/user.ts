@@ -1,4 +1,5 @@
-import { createReducer, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { createUserAsync, loginAsync } from '../actions/user';
 
 interface User {
 	_id: string;
@@ -14,22 +15,51 @@ interface UserState {
 	token: string;
 }
 
+
 const initialState: UserState = {
 	loading: 'idle',
 	isAuthenticated: false,
 	error: null,
 	user: null,
-	token: ''
+	token: '',
 };
 
 const userSlice = createSlice({
 	name: 'user',
 	initialState,
-	reducers: {
-		loadUser: (state, action) => {}
+	reducers: {},
+	extraReducers: (builder) => {
+		builder
+			.addCase(loginAsync.pending, (state) => {
+				state.loading = 'pending'
+				state.error = null
+			})
+			.addCase(loginAsync.fulfilled, (state, action) => {
+				state.loading = 'succeeded'
+				state.isAuthenticated = true 
+				state.token = action.payload.token 
+				state.user = action.payload.user 
+			})
+			.addCase(loginAsync.rejected, (state,action) => {
+				state.loading = 'failed'
+				state.error = action.error.message || 'An error occured'
+				throw action.error 
+			})
+			.addCase(createUserAsync.pending, (state) => {
+				state.loading = 'pending'
+				state.error = null
+			})
+			.addCase(createUserAsync.fulfilled, (state) => {
+				state.loading = 'succeeded'
+			})
+			.addCase(createUserAsync.rejected, (state,action) => {
+				state.loading = 'failed'
+				state.error = action.error.message || 'An error occured'
+				throw action.error 
+			})
 	}
 });
 
-export const { loadUser } = userSlice.actions;
+export const { } = userSlice.actions;
 
 export default userSlice;
