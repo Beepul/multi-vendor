@@ -47,7 +47,7 @@ userRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
     
         const activationToken = createActivationToken({name,email,password})
     
-        const activationUrl = `http://localhost:5173/activation?token=${activationToken}`;
+        const activationUrl = `http://localhost:5173/activation/${activationToken}`;
         await sendEmail({
             email: email,
             subject: "Please Activate Your Account",
@@ -68,9 +68,11 @@ userRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
     }
 }))
 
-userRouter.get('/activation', catchAsyncErrors( async (req,res,next) => {
+userRouter.get('/activation/:token', catchAsyncErrors( async (req,res,next) => {
     try {
-        const {token} = req.body
+        const {token} = req.params
+
+        console.log('From activation',token)
     
         const { name, email, password } = jwt.verify(token, process.env.JWT_SECRET);
     

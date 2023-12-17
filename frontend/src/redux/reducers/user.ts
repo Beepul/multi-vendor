@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createUserAsync, loginAsync } from '../actions/user';
+import { activateUserAsync, createUserAsync, loginAsync } from '../actions/user';
 
 interface User {
 	_id: string;
@@ -53,6 +53,21 @@ const userSlice = createSlice({
 				state.loading = 'succeeded'
 			})
 			.addCase(createUserAsync.rejected, (state,action) => {
+				state.loading = 'failed'
+				state.error = action.error.message || 'An error occured'
+				throw action.error 
+			})
+			.addCase(activateUserAsync.pending, (state) => {
+				state.loading = 'pending'
+				state.error = null
+			})
+			.addCase(activateUserAsync.fulfilled, (state, action) => {
+				state.loading = 'succeeded'
+				state.isAuthenticated = true 
+				state.token = action.payload.token 
+				state.user = action.payload.user 
+			})
+			.addCase(activateUserAsync.rejected, (state,action) => {
 				state.loading = 'failed'
 				state.error = action.error.message || 'An error occured'
 				throw action.error 

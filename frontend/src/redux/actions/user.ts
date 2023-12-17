@@ -17,7 +17,7 @@ export const loginAsync = createAsyncThunk('user/login',async (loginData:LoginDa
         return response.data
     } catch (error: unknown) {
         if(error instanceof AxiosError){
-            throw new Error('Login failed: ' + error.message)
+            throw new Error('Login failed: ' + error.response?.data.message)
         }else{
             return Promise.reject()
         }
@@ -31,37 +31,24 @@ export const createUserAsync = createAsyncThunk('user/create',async (loginData:L
         return response.data
     } catch (error: unknown) {
         if(error instanceof AxiosError){
-            throw new Error('Login failed: ' + error.message)
+            throw new Error('User Creation failed: ' + error.response?.data.message)
         }else{
             return Promise.reject()
         }
     }
 })
 
-// export const loginAsync = createAsyncThunk(
-//   "user/login",
-//   async (loginData: LoginData) => {
-//     try {
-//       const response = await lwpAxios.post("/user/login", loginData, {
-//         withCredentials: true,
-//       });
-//       return response.data;
-//     } catch (error: unknown) {
-//       if (error instanceof AxiosError) {
-//         throw new Error("Login failed: " + error.message);
-//       } else {
-//         return Promise.reject();
-//       }
-//     }
-//   }
-// );
-
-// export const signupAsync = createAsyncThunk(
-//   "user/create",
-//   async (loginData: LoginData) => {
-//     const response = await lwpAxios.post("/user/create", loginData, {
-//       withCredentials: true,
-//     });
-//     return response.data;
-//   }
-// );
+export const activateUserAsync = createAsyncThunk('user/activation',async (token:String) => {
+    try {
+        const response = await lwpAxios.get(`/user/activation/${token}`)
+        // console.log(response)
+        return response.data
+    } catch (error: unknown) {
+        // console.log(error)
+        if(error instanceof AxiosError){
+            throw new Error('Activation failed: ' + error.response?.data.message)
+        }else{
+            return Promise.reject()
+        }
+    }
+})

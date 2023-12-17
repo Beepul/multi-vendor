@@ -1,28 +1,33 @@
-import axios from "axios";
+import { AxiosError } from "axios";
 import { useEffect } from "react";
-import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { AppDispatch } from "../redux/store";
+import { activateUserAsync } from "../redux/actions/user";
+import { toast } from "react-toastify";
 
 const ActivationPage = () => {
-  const { activation_token } = useParams();
-  const [error, setError] = useState(false);
+  const { activationToken } = useParams();
 
-  useEffect(() => {
-    if (activation_token) {
-      const sendRequest = async () => {
-        await axios
-          .post(`/user/activation`, {
-            token: activation_token,
-          })
-          .then((res) => {
-            // success -> home 
-            console.log(res);
-          })
-          .catch(() => {
-            setError(true);
-          });
-      };
-      sendRequest();
+  // console.log(activationToken)
+
+  const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
+
+  useEffect( () => {
+    if (activationToken) {
+      const sendRequest = async ()  => {
+        try {
+          await dispatch(activateUserAsync(activationToken))
+          toast.success('User Activation Success')
+          navigate('/')
+        } catch (error: unknown) {
+          const axiosError = error as AxiosError
+          toast.error(axiosError.message || 'Error occured while activation')
+          // console.log(error)
+        }
+      }
+      sendRequest()
     }
   }, []);
 
@@ -36,11 +41,7 @@ const ActivationPage = () => {
         alignItems: "center",
       }}
     >
-      {error ? (
-        <p>Your token is expired!</p>
-      ) : (
-        <p>Your account has been created suceessfully!</p>
-      )}
+      <div>Activation Page</div>
     </div>
   );
 };

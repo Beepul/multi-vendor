@@ -25,7 +25,6 @@ const Register = () => {
     } catch (error: unknown) {
       const axiosError = error as AxiosError
       toast.error(axiosError.message || 'An Error Occurred')
-      console.log(error)
     }
   }
   return (
