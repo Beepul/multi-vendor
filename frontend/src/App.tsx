@@ -6,6 +6,9 @@ import Register from './pages/auth/Register';
 import Login from './pages/auth/Login';
 import ActivationPage from './pages/ActivationPage';
 import Home from './pages/Home';
+import ShopLogin from './pages/auth/shop/ShopLogin';
+import ShopRegister from './pages/auth/shop/ShopRegister';
+import ShopActivation from './pages/auth/shop/ShopActivation';
 
 function App() {
 	return (
@@ -14,6 +17,10 @@ function App() {
 				<Route path="/login" element={<Login />} />
 				<Route path="/register" element={<Register />} />
 				<Route path="/activation/:activationToken" element={<ActivationPage />} />
+				
+				<Route path='/shop/login' element={<ShopLogin />} />
+				<Route path='/shop/register' element={<ShopRegister />} />
+				<Route path='/shop/activation/:activationToken' element={<ShopActivation />} />
 				<Route path="/" index element={<Home />} />
 			</Routes>
 

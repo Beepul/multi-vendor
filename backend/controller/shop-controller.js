@@ -14,7 +14,7 @@ const createActivationToken = (shopData) => {
 
 shopRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
     try {
-        const {name,email,password} = req.body
+        const {name,phoneNumber, email, address, zipCode, password} = req.body
     
         if(!name){
             return next(new LWPError('Name cannot be empty', 401))
@@ -26,6 +26,15 @@ shopRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
     
         if(!password){
             return next(new LWPError('Password cannot be empty', 401))
+        }
+        if(!phoneNumber){
+            return next(new LWPError('phoneNumber cannot be empty', 401))
+        }
+        if(!address){
+            return next(new LWPError('address cannot be empty', 401))
+        }
+        if(!zipCode){
+            return next(new LWPError('zipCode cannot be empty', 401))
         }
     
         // Email validation
@@ -45,9 +54,9 @@ shopRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
             return next(new LWPError('Shop with the provided email already exists', 401))
         }
     
-        const activationToken = createActivationToken({name,email,password})
+        const activationToken = createActivationToken({name,phoneNumber, email, address, zipCode, password})
     
-        const activationUrl = `http://localhost:8080/api/v1/shop/activation?token=${activationToken}`;
+        const activationUrl = `http://localhost:5173/shop/activation/${activationToken}`;
         await sendEmail({
             email: email,
             subject: "Please Activate Your Account",
@@ -68,12 +77,12 @@ shopRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
     }
 }))
 
-shopRouter.get('/activation', catchAsyncErrors( async (req,res,next) => {
+shopRouter.get('/activation/:token', catchAsyncErrors( async (req,res,next) => {
     try {
-        const {token} = req.query
+        const {token} = req.params
     
     
-        const { name, email, password } = jwt.verify(token, process.env.JWT_SECRET);
+        const {name,phoneNumber, email, address, zipCode, password} = jwt.verify(token, process.env.JWT_SECRET);
     
         // Email validation
         // Check if the email is valid or not
@@ -92,7 +101,7 @@ shopRouter.get('/activation', catchAsyncErrors( async (req,res,next) => {
             return next(new LWPError('Shop with the provided email already exists', 401))
         }
     
-        const shopCreated = await ShopModel.create({ name, email, password });
+        const shopCreated = await ShopModel.create({name,phoneNumber, email, address, zipCode, password});
         
     
         sendToken(shopCreated, 201, res,'shop_token')
