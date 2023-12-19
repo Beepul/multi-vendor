@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {AiOutlineEye,AiOutlineEyeInvisible} from 'react-icons/ai'
 import lwpStyles from '../../../styles/index'
 import { Link, useNavigate } from 'react-router-dom'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { shopLoginAsync } from '../../../redux/actions/shop'
-import { AppDispatch } from '../../../redux/store'
+import { AppDispatch, RootState } from '../../../redux/store'
 
 const ShopLogin = () => {
     const [email,setEmail] = useState('')
@@ -16,6 +16,16 @@ const ShopLogin = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch<AppDispatch>()
+
+    const {isAuthenticated, shop} = useSelector((state: RootState) => state.shop)
+
+    useEffect(() => {
+      console.log("I am here");
+      if (isAuthenticated && shop) {
+        console.log("I am here inside");
+        navigate("/");
+      }
+    }, [isAuthenticated, shop, navigate]);
 
     const handleSubmit = async (e: {preventDefault: () => void}) => {
         e.preventDefault()

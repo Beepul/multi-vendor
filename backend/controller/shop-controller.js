@@ -5,6 +5,7 @@ const LWPError = require('../utils/error')
 const sendToken = require('../utils/jwtToken')
 const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 const ShopModel = require('../model/shopModel')
+const { isSeller } = require('../middleware/auth')
 
 const shopRouter = express.Router()
 
@@ -136,5 +137,28 @@ shopRouter.post('/login', catchAsyncErrors(async (req,res,next) => {
         throw next(new LWPError(error,500))
     }
 }))
+
+shopRouter.get(
+    "/",
+    isSeller,
+    catchAsyncErrors(async (req, res, next) => {
+        console.log("shop:: ",req.shop)
+      try {
+
+        const shop = await ShopModel.findById(req.shop._id);
+  
+        if (!shop) {
+          return next(new LWPError("Shop doesn't exists", 400));
+        }
+  
+        res.status(200).json({
+          success: true,
+          shop,
+        });
+      } catch (error) {
+        return next(new LWPError(error.message, 500));
+      }
+    })
+);
 
 module.exports = shopRouter

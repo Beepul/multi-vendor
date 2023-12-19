@@ -14,7 +14,15 @@ exports.isAuthenticated = catchAsyncErrors(async (req,res,next) => {
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-    req.user = await UserModel.findById(decoded.id)
+    console.log(decoded.id)
+
+    const user = await UserModel.findById(decoded.id)
+
+    if(!user){
+        return next(new LWPError('You are not authorized to access this resources', 401))
+    }
+
+    req.user = user
 
     next()
 })
@@ -28,7 +36,14 @@ exports.isSeller = catchAsyncErrors(async (req,res,next) => {
 
     const decoded = jwt.verify(shop_token, process.env.JWT_SECRET)
 
-    req.seller = await ShopModel.findById(decoded.id)
+    
+    const shop = await ShopModel.findById(decoded.id)
+    
+    if(!shop){
+        return next(new LWPError('Only shops are access this resources', 401))
+    }
 
+    req.shop = shop
+    
     next()
 })

@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import lwpStyles from "../../styles";
-import { AppDispatch } from "../../redux/store";
-import { useDispatch } from "react-redux";
+import lwpStyles from "../../../styles";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import { AxiosError } from "axios";
-import { createUserAsync } from "../../redux/actions/user";
+import { createUserAsync } from "../../../redux/actions/user";
 
 const Register = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -15,6 +15,16 @@ const Register = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
+
+  const {isAuthenticated, user} = useSelector((state: RootState) => state.user)
+
+  useEffect(() => {
+    console.log("I am here");
+    if (isAuthenticated && user) {
+      console.log("I am here inside");
+      navigate("/");
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: {preventDefault: () => void}) => {
     e.preventDefault()

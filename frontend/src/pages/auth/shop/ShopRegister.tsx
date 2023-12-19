@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {AiOutlineEyeInvisible, AiOutlineEye} from 'react-icons/ai'
 import { Link, useNavigate } from 'react-router-dom'
 import lwpStyles from '../../../styles/index'
 import { toast } from 'react-toastify'
 import { AxiosError } from 'axios'
 import { shopRegisterAsync } from '../../../redux/actions/shop'
-import { useDispatch } from 'react-redux'
-import { AppDispatch } from '../../../redux/store'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../../../redux/store'
 
 const ShopRegister = () => {
     const [name,setName] = useState('')
@@ -19,6 +19,16 @@ const ShopRegister = () => {
 
     const navigate = useNavigate()
     const dispatch = useDispatch<AppDispatch>()
+
+    const {isAuthenticated, shop} = useSelector((state: RootState) => state.shop)
+
+    useEffect(() => {
+      console.log("I am here");
+      if (isAuthenticated && shop) {
+        console.log("I am here inside");
+        navigate("/");
+      }
+    }, [isAuthenticated, shop, navigate]);
 
     const handleSubmit = async (e: {preventDefault: () => void}) => {
         e.preventDefault()

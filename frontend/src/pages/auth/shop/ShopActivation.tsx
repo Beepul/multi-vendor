@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'react-toastify';
@@ -17,8 +17,8 @@ const ShopActivation = () => {
           const sendRequest = async ()  => {
             try {
               await dispatch(shopActivateAsync(activationToken))
-              toast.success('User Activation Success')
-              navigate('/')
+              toast.success('Shop Activation Success')
+              navigate('/login')
             } catch (error: unknown) {
               const axiosError = error as AxiosError
               toast.error(axiosError.message || 'Error occured while activation')

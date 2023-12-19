@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { shopActivateAsync, shopLoginAsync, shopRegisterAsync } from "../actions/shop";
+import { autoShopLoginAsync, shopActivateAsync, shopLoginAsync, shopRegisterAsync } from "../actions/shop";
 
 interface Shop {
     _id: string;
@@ -13,7 +13,6 @@ interface ShopState {
     isAuthenticated: boolean;
     error: null | string;
     shop: Shop | null
-    token: string
 }
 
 const initialState : ShopState = {
@@ -21,7 +20,6 @@ const initialState : ShopState = {
 	isAuthenticated: false,
 	error: null,
 	shop: null,
-	token: '',
 }
 
 
@@ -38,7 +36,6 @@ const shopSlice = createSlice({
             .addCase(shopLoginAsync.fulfilled, (state, action) => {
                 state.loading = 'succeeded'
                 state.isAuthenticated = true 
-                state.token = action.payload.token
                 state.shop = action.payload.user
             })
             .addCase(shopLoginAsync.rejected, (state,action) => {
@@ -65,13 +62,17 @@ const shopSlice = createSlice({
 			.addCase(shopActivateAsync.fulfilled, (state, action) => {
 				state.loading = 'succeeded'
 				state.isAuthenticated = true 
-				state.token = action.payload.token 
 				state.shop = action.payload.user 
 			})
 			.addCase(shopActivateAsync.rejected, (state,action) => {
 				state.loading = 'failed'
 				state.error = action.error.message || 'An error occured'
 				throw action.error 
+			})
+            .addCase(autoShopLoginAsync.fulfilled, (state, action) => {
+				state.loading = 'succeeded'
+				state.isAuthenticated = true 
+				state.shop = action.payload.shop 
 			})
     }
 })

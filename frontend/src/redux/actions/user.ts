@@ -52,3 +52,18 @@ export const activateUserAsync = createAsyncThunk('user/activation',async (token
         }
     }
 })
+
+export const autoLoginAsync = createAsyncThunk('user/autoLogin',async () => {
+    try {
+        const response = await lwpAxios.get('/user', {
+            withCredentials: true
+        })
+        return response.data
+    } catch (error: unknown) {
+        if(error instanceof AxiosError){
+            throw new Error('Login failed: ' + error.response?.data.message)
+        }else{
+            return Promise.reject()
+        }
+    }
+})

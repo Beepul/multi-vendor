@@ -1,11 +1,11 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { AiOutlineEye } from "react-icons/ai";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
-import styles from "../../styles";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
-import { loginAsync } from "../../redux/actions/user";
+import styles from "../../../styles";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../../redux/store";
+import { loginAsync } from "../../../redux/actions/user";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
 
@@ -18,6 +18,16 @@ const Login = () => {
 
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
+
+  const {isAuthenticated, user} = useSelector((state: RootState) => state.user)
+
+  useEffect(() => {
+    console.log("I am here");
+    if (isAuthenticated && user) {
+      console.log("I am here inside");
+      navigate("/");
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: {preventDefault: () => void}) => {
     e.preventDefault()

@@ -5,6 +5,7 @@ const UserModel = require('../model/userModel')
 const LWPError = require('../utils/error')
 const sendToken = require('../utils/jwtToken')
 const catchAsyncErrors = require('../middleware/catchAsyncErrors')
+const { isAuthenticated } = require('../middleware/auth')
 
 const userRouter = express.Router()
 
@@ -127,5 +128,28 @@ userRouter.post('/login', catchAsyncErrors(async (req,res,next) => {
         throw next(new LWPError(error,500))
     }
 }))
+
+userRouter.get(
+    "/",
+    isAuthenticated,
+    catchAsyncErrors(async (req, res, next) => {
+        console.log(req.user)
+      try {
+
+        const user = await UserModel.findById(req.user._id);
+  
+        if (!user) {
+          return next(new LWPError("User doesn't exists", 400));
+        }
+  
+        res.status(200).json({
+          success: true,
+          user,
+        });
+      } catch (error) {
+        return next(new LWPError(error.message, 500));
+      }
+    })
+  );
 
 module.exports = userRouter

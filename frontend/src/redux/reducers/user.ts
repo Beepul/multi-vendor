@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { activateUserAsync, createUserAsync, loginAsync } from '../actions/user';
+import { activateUserAsync, autoLoginAsync, createUserAsync, loginAsync } from '../actions/user';
 
 interface User {
 	_id: string;
@@ -12,7 +12,6 @@ interface UserState {
 	isAuthenticated: boolean;
 	error: string | null;
 	user: User | null;
-	token: string;
 }
 
 
@@ -21,7 +20,6 @@ const initialState: UserState = {
 	isAuthenticated: false,
 	error: null,
 	user: null,
-	token: '',
 };
 
 const userSlice = createSlice({
@@ -37,7 +35,6 @@ const userSlice = createSlice({
 			.addCase(loginAsync.fulfilled, (state, action) => {
 				state.loading = 'succeeded'
 				state.isAuthenticated = true 
-				state.token = action.payload.token 
 				state.user = action.payload.user 
 			})
 			.addCase(loginAsync.rejected, (state,action) => {
@@ -64,13 +61,17 @@ const userSlice = createSlice({
 			.addCase(activateUserAsync.fulfilled, (state, action) => {
 				state.loading = 'succeeded'
 				state.isAuthenticated = true 
-				state.token = action.payload.token 
 				state.user = action.payload.user 
 			})
 			.addCase(activateUserAsync.rejected, (state,action) => {
 				state.loading = 'failed'
 				state.error = action.error.message || 'An error occured'
 				throw action.error 
+			})
+			.addCase(autoLoginAsync.fulfilled, (state, action) => {
+				state.loading = 'succeeded'
+				state.isAuthenticated = true 
+				state.user = action.payload.user 
 			})
 	}
 });
