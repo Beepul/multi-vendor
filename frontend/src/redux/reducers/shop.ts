@@ -69,11 +69,21 @@ const shopSlice = createSlice({
 				state.error = action.error.message || 'An error occured'
 				throw action.error 
 			})
+            .addCase(autoShopLoginAsync.pending, (state) => {
+                state.loading = "pending";
+            })
             .addCase(autoShopLoginAsync.fulfilled, (state, action) => {
 				state.loading = 'succeeded'
 				state.isAuthenticated = true 
 				state.shop = action.payload.shop 
 			})
+            .addCase(autoShopLoginAsync.rejected, (state, action) => {
+                state.loading = "failed";
+                state.isAuthenticated = false 
+                state.error = action.error.message || 'An error occured while auto login shop'
+                console.log(state.loading)
+                throw action.error;
+            })
     }
 })
 

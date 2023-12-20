@@ -22,7 +22,7 @@ const Register = () => {
     console.log("I am here");
     if (isAuthenticated && user) {
       console.log("I am here inside");
-      navigate("/");
+      navigate("/login");
     }
   }, [isAuthenticated, user, navigate]);
 

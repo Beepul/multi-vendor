@@ -10,6 +10,11 @@ import Home from './pages/Home';
 import ShopLogin from './pages/auth/shop/ShopLogin';
 import ShopRegister from './pages/auth/shop/ShopRegister';
 import ShopActivation from './pages/auth/shop/ShopActivation';
+import ShopProtectedRoute from './routes/ShopProtectedRoute';
+import ShopDashboard from './pages/shop/Dashboard';
+import NotFound from './components/NotFound';
+import ShopCreateProduct from './pages/shop/CreateProduct';
+
 
 
 function App() {
@@ -24,8 +29,26 @@ function App() {
 				<Route path='/shop/login' element={<ShopLogin />} />
 				<Route path='/shop/register' element={<ShopRegister />} />
 				<Route path='/shop/activation/:activationToken' element={<ShopActivation />} />
+
+				<Route path='/shop/dashboard' element={
+					<ShopProtectedRoute>
+						<ShopDashboard />
+					</ShopProtectedRoute>
+				} />
+
+				<Route
+					path="/dashboard/create-product"
+					element={
+						<ShopProtectedRoute>
+							<ShopCreateProduct />
+						</ShopProtectedRoute>
+					}
+				/>
+
+
 				<Route path="/" index element={<Home />} />
-				{/* <Route path='/product' element={<PrivateRoute><Products /></PrivateRoute>} /> */}
+				<Route path="*" element={<NotFound />} />
+				
 			</Routes>
 
 			<ToastContainer

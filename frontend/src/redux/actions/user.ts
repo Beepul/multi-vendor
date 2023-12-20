@@ -58,6 +58,7 @@ export const autoLoginAsync = createAsyncThunk('user/autoLogin',async () => {
         const response = await lwpAxios.get('/user', {
             withCredentials: true
         })
+        // console.log(response)
         return response.data
     } catch (error: unknown) {
         if(error instanceof AxiosError){

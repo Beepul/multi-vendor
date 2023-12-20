@@ -68,10 +68,19 @@ const userSlice = createSlice({
 				state.error = action.error.message || 'An error occured'
 				throw action.error 
 			})
+			.addCase(autoLoginAsync.pending, (state) => {
+				state.loading = 'pending'
+			})
 			.addCase(autoLoginAsync.fulfilled, (state, action) => {
+				// console.log(action.payload.user)
 				state.loading = 'succeeded'
 				state.isAuthenticated = true 
 				state.user = action.payload.user 
+			})
+			.addCase(autoLoginAsync.rejected, (state,action) => {
+				state.loading = 'failed'
+				state.error = action.error.message || 'An error occured while auto login'
+				throw action .error
 			})
 	}
 });

@@ -14,6 +14,7 @@ productRouter.post('/create', isSeller , catchAsyncErrors(async (req,res,next) =
     try {
         const {name,description,category,tags,originalPrice,discountPrice,stock,shopId} = req.body 
 
+        console.log('here')
         if(!name || !description || !category || !originalPrice || !discountPrice || !stock || !shopId){
             return next(new LWPError('All feilds required',401))
         }

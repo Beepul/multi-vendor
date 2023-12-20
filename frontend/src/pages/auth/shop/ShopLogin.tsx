@@ -23,7 +23,7 @@ const ShopLogin = () => {
       console.log("I am here");
       if (isAuthenticated && shop) {
         console.log("I am here inside");
-        navigate("/");
+        navigate("/shop/dashboard");
       }
     }, [isAuthenticated, shop, navigate]);
 
