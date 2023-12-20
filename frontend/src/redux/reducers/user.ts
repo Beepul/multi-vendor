@@ -80,7 +80,7 @@ const userSlice = createSlice({
 			.addCase(autoLoginAsync.rejected, (state,action) => {
 				state.loading = 'failed'
 				state.error = action.error.message || 'An error occured while auto login'
-				throw action .error
+				// throw action .error
 			})
 	}
 });

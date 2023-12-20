@@ -82,7 +82,7 @@ const shopSlice = createSlice({
                 state.isAuthenticated = false 
                 state.error = action.error.message || 'An error occured while auto login shop'
                 console.log(state.loading)
-                throw action.error;
+                // throw action.error;
             })
     }
 })

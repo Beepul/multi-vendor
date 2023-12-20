@@ -73,7 +73,7 @@ userRouter.get('/activation/:token', catchAsyncErrors( async (req,res,next) => {
     try {
         const {token} = req.params
 
-        console.log('From activation',token)
+        // console.log('From activation',token)
     
         const { name, email, password } = jwt.verify(token, process.env.JWT_SECRET);
     
@@ -133,7 +133,7 @@ userRouter.get(
     "/",
     isAuthenticated,
     catchAsyncErrors(async (req, res, next) => {
-        console.log(req.user)
+        // console.log(req.user)
       try {
 
         const user = await UserModel.findById(req.user._id);

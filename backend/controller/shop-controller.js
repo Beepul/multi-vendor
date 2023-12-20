@@ -142,7 +142,7 @@ shopRouter.get(
     "/",
     isSeller,
     catchAsyncErrors(async (req, res, next) => {
-        console.log("shop:: ",req.shop)
+        // console.log("shop:: ",req.shop)
       try {
 
         const shop = await ShopModel.findById(req.shop._id);

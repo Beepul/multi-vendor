@@ -8,9 +8,9 @@ interface ProductData {
     description: string;
     category: string;
     tags?: string;
-    originalPrice: string;
-    discountPrice: string;
-    stock: string;
+    originalPrice: number;
+    discountPrice?: number;
+    stock: number;
 
 }
 

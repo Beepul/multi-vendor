@@ -12,39 +12,30 @@ productRouter.post('/create', isSeller , catchAsyncErrors(async (req,res,next) =
     // res.send('Create product')
 
     try {
-        const {name,description,category,tags,originalPrice,discountPrice,stock,shopId} = req.body 
+        const {name,description,category,tags,originalPrice,discountPrice,stock} = req.body 
 
-        console.log('here')
-        if(!name || !description || !category || !originalPrice || !discountPrice || !stock || !shopId){
+        // console.log('here')
+        if(!name || !description || !category || !originalPrice || !discountPrice || !stock){
             return next(new LWPError('All feilds required',401))
         }
 
-        const shop = await ShopModel.findById(shopId)
-
-        if(!shop){
-            return next(new LWPError(`Shop with id ${shopId} not found`, 404))
-        }
-
-        const product = {
+        const productData = {
             name,
             description,
             category,
             originalPrice,
             discountPrice,
             stock,
-            shopId: shop._id 
+            tags,
+            shopId: req.shop._id 
         } 
 
-        if(tags){
-            product.tags = tags
-        }
-
-        const newProduct = await Product.create(product)
+        const product = await Product.create(productData)
 
         res.status(201).json({
             success: true,
             message: 'Product created successfully',
-            product: newProduct
+            product
         })
         
     } catch (error) {

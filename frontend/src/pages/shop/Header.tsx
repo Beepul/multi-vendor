@@ -13,8 +13,8 @@ const ShopHeader = () => {
   return (
     <div className="w-full h-[80px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">
       <div>
-        <Link to="/shop-dashboard">
-          <p>LWP-Multi Vendor</p>
+        <Link to="/shop/dashboard">
+          <p>Multi Vendor</p>
         </Link>
       </div>
       <div className="flex items-center">
@@ -43,13 +43,13 @@ const ShopHeader = () => {
           <Link to="/dashboard-orders" className="800px:block hidden">
             <FiPackage color="#555" size={30} className="mx-5 cursor-pointer" />
           </Link>
-          <Link to="/dashboard-messages" className="800px:block hidden">
+          {/* <Link to="/dashboard-messages" className="800px:block hidden">
             <BiMessageSquareDetail
               color="#555"
               size={30}
               className="mx-5 cursor-pointer"
             />
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>

@@ -37,7 +37,7 @@ exports.isSeller = catchAsyncErrors(async (req,res,next) => {
     try {
         const {shop_token} = req.cookies
 
-        console.log(req.cookies)
+        // console.log(req.cookies)
     
         if(!shop_token){
             return next(new LWPError('Shop Please login to continue', 401))

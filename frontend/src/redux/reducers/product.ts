@@ -33,10 +33,11 @@ const productSlice = createSlice({
         builder
             .addCase(createProductAsync.pending, (state) => {
                 state.loading ='pending'
+                state.error = null
             })
             .addCase(createProductAsync.fulfilled, (state, action) => {
                 state.loading ='succeeded'
-                state.products = [...state.products, action.payload.product]
+                state.products = [action.payload.product, ...state.products ]
             })
             .addCase(createProductAsync.rejected, (state, action) => {
                 state.loading = 'failed'
