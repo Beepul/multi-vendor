@@ -8,7 +8,7 @@ import { RootState } from "../../redux/store";
 
 const ShopHeader = () => {
   const { shop } = useSelector((state: RootState) => state.shop);
-  console.log("Shop ", shop);
+  // console.log("Shop ", shop);
 
   return (
     <div className="w-full h-[80px] bg-white shadow sticky top-0 left-0 z-30 flex items-center justify-between px-4">

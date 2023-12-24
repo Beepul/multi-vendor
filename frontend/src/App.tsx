@@ -14,10 +14,14 @@ import ShopProtectedRoute from './routes/ShopProtectedRoute';
 import ShopDashboard from './pages/shop/Dashboard';
 import NotFound from './components/NotFound';
 import ShopCreateProduct from './pages/shop/CreateProduct';
+import ShopAllProducts from './pages/shop/AllProducts';
+import ProductDetails from './pages/product/ProductDetails';
+import Products from './pages/product/Products';
 
 
 
 function App() {
+
 	
 	return (
 		<BrowserRouter>
@@ -37,6 +41,15 @@ function App() {
 				} />
 
 				<Route
+					path="/shop/dashboard-products"
+					element={
+						<ShopProtectedRoute>
+							<ShopAllProducts />
+						</ShopProtectedRoute>
+					}
+				/>
+
+				<Route
 					path="/dashboard/create-product"
 					element={
 						<ShopProtectedRoute>
@@ -44,6 +57,9 @@ function App() {
 						</ShopProtectedRoute>
 					}
 				/>
+
+				<Route path='/products' element={<Products />} />
+				<Route path='/product/:id' element={<ProductDetails />} />
 
 
 				<Route path="/" index element={<Home />} />

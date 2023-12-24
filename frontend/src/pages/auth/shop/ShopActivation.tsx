@@ -18,7 +18,7 @@ const ShopActivation = () => {
             try {
               await dispatch(shopActivateAsync(activationToken))
               toast.success('Shop Activation Success')
-              navigate('/login')
+              navigate('/shop/login')
             } catch (error: unknown) {
               const axiosError = error as AxiosError
               toast.error(axiosError.message || 'Error occured while activation')

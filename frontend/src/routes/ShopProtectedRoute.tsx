@@ -12,7 +12,7 @@ const ShopProtectedRoute: React.FC<ShopProtectedRouteProps> = ({children}) => {
   
     const {loading, isAuthenticated,shop} = useSelector((state: RootState) => state.shop)
 
-    console.log(loading)
+    // console.log(loading)
     if(loading === 'pending'){
         return <Loader />
     }else{

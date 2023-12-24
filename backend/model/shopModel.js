@@ -39,13 +39,6 @@ const shopSchema = new mongoose.Schema({
   },
 });
 
-shopSchema.pre('save', async function(next){
-  if(!this.isModified('password')){
-    next()
-  }
-  this.password = await bcrypt.hash(this.password, 10)
-})
-
 shopSchema.methods.getJwtToken = function(){
   return jwt.sign({id: this._id}, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES

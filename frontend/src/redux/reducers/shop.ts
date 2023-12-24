@@ -81,7 +81,7 @@ const shopSlice = createSlice({
                 state.loading = "failed";
                 state.isAuthenticated = false 
                 state.error = action.error.message || 'An error occured while auto login shop'
-                console.log(state.loading)
+                // console.log(state.loading)
                 // throw action.error;
             })
     }

@@ -1,17 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createProductAsync } from "../actions/product";
+import { createProductAsync, deleteProductAsync, getAllProductsAsync } from "../actions/product";
+import { Product } from "../../types/product";
 
-interface Product {
-    _id: string;
-    name: string;
-    description: string;
-    category: string;
-    tags?: string;
-    originalPrice: string;
-    discountPrice: string;
-    stock: string;
-    shopId: string;
-}
+
 
 interface ProductState {
     loading: 'idle' | 'pending' | 'succeeded' | 'failed';
@@ -40,6 +31,32 @@ const productSlice = createSlice({
                 state.products = [action.payload.product, ...state.products ]
             })
             .addCase(createProductAsync.rejected, (state, action) => {
+                state.loading = 'failed'
+                state.error = action.error.message || 'An error occured '
+                throw action.error
+            })
+            .addCase(getAllProductsAsync.pending, (state) => {
+                state.loading ='pending'
+                state.error = null
+            })
+            .addCase(getAllProductsAsync.fulfilled, (state, action) => {
+                state.loading ='succeeded'
+                state.products = action.payload.products
+            })
+            .addCase(getAllProductsAsync.rejected, (state, action) => {
+                state.loading = 'failed'
+                state.error = action.error.message || 'An error occured '
+                throw action.error
+            })
+            .addCase(deleteProductAsync.pending, (state) => {
+                state.loading ='pending'
+                state.error = null
+            })
+            .addCase(deleteProductAsync.fulfilled, (state, action) => {
+                state.loading ='succeeded'
+                state.products = state.products.filter(product => product._id !== action.payload)
+            })
+            .addCase(deleteProductAsync.rejected, (state, action) => {
                 state.loading = 'failed'
                 state.error = action.error.message || 'An error occured '
                 throw action.error

@@ -6,6 +6,7 @@ const LWPError = require('../utils/error')
 const sendToken = require('../utils/jwtToken')
 const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 const { isAuthenticated } = require('../middleware/auth')
+const hashPassword = require('../utils/hashPassword')
 
 const userRouter = express.Router()
 
@@ -45,8 +46,10 @@ userRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
         if(isEmailExists){
             return next(new LWPError('User with the provided email already exists', 401))
         }
+
+        const hashedPassword = await hashPassword(password)
     
-        const activationToken = createActivationToken({name,email,password})
+        const activationToken = createActivationToken({name,email,password: hashedPassword})
     
         const activationUrl = `http://localhost:5173/activation/${activationToken}`;
         await sendEmail({

@@ -6,6 +6,7 @@ const sendToken = require('../utils/jwtToken')
 const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 const ShopModel = require('../model/shopModel')
 const { isSeller } = require('../middleware/auth')
+const hashPassword = require('../utils/hashPassword')
 
 const shopRouter = express.Router()
 
@@ -54,8 +55,10 @@ shopRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
         if(isEmailExists){
             return next(new LWPError('Shop with the provided email already exists', 401))
         }
+
+        const hashedPassword = await hashPassword(password)
     
-        const activationToken = createActivationToken({name,phoneNumber, email, address, zipCode, password})
+        const activationToken = createActivationToken({name,phoneNumber, email, address, zipCode, password: hashedPassword})
     
         const activationUrl = `http://localhost:5173/shop/activation/${activationToken}`;
         await sendEmail({
