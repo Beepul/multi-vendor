@@ -1,17 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { activateUserAsync, autoLoginAsync, createUserAsync, loginAsync } from '../actions/user';
+import { CartProduct } from '../../types/product';
+import { User } from '../../types/user';
 
-interface User {
-	_id: string;
-	name: string;
-	email: string;
-}
+
 
 interface UserState {
 	loading: 'idle' | 'pending' | 'succeeded' | 'failed';
 	isAuthenticated: boolean;
 	error: string | null;
 	user: User | null;
+	cart: CartProduct[]
 }
 
 
@@ -20,12 +19,38 @@ const initialState: UserState = {
 	isAuthenticated: false,
 	error: null,
 	user: null,
+	cart: [],
 };
 
 const userSlice = createSlice({
 	name: 'user',
 	initialState,
-	reducers: {},
+	reducers: {
+		addToCart: (state, action) => {
+			const cartProduct: CartProduct = action.payload
+			
+			const existingProduct = state.cart.find((item) => item._id === cartProduct._id)
+
+			const newCart = state.cart.map((product) => {
+				return product._id === existingProduct?._id ? cartProduct : product
+			})
+
+			if(existingProduct){
+				return {
+					...state,
+					cart: newCart
+				}
+			}else{
+				return {
+					...state,
+					cart: [...state.cart, cartProduct]
+				}
+			}
+		},
+		removeFromCart: (state, action) => {
+			state.cart = state.cart.filter((cart) => cart._id !== action.payload)
+		}
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(loginAsync.pending, (state) => {
@@ -85,6 +110,6 @@ const userSlice = createSlice({
 	}
 });
 
-export const { } = userSlice.actions;
+export const { addToCart, removeFromCart} = userSlice.actions;
 
 export default userSlice;

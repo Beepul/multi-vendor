@@ -46,7 +46,6 @@ const productSlice = createSlice({
             .addCase(getAllProductsAsync.rejected, (state, action) => {
                 state.loading = 'failed'
                 state.error = action.error.message || 'An error occured '
-                throw action.error
             })
             .addCase(deleteProductAsync.pending, (state) => {
                 state.loading ='pending'

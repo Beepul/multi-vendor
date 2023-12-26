@@ -5,6 +5,9 @@ import { toast } from "react-toastify";
 import lwpStyles from "../../styles";
 import ProductDetailsCard from "./ProductDetailsCard";
 import { Product } from "../../types/product";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { addToCart } from "../../redux/reducers/user";
 
 interface ProductCardProps {
   product: Product;
@@ -13,8 +16,24 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const [open, setOpen] = useState(false);
 
+  const {cart} = useSelector((state: RootState) => state.user)
+
+  const dispatch = useDispatch<AppDispatch>()
+
   const addToCartHandler = (id: string) => {
-    //
+    const isItemExists = cart.find((c) => c._id === id)
+    if(isItemExists){
+      toast.error('Item already in cart')
+      return
+    }
+    if(product.stock < 1) {
+      toast.error('')
+      return 
+    }
+    const cartData = {...product, quantity: 1}
+    dispatch(addToCart(cartData))
+    toast.success('Item added to cart successfully!')
+
   };
 
   return (

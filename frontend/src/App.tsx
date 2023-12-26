@@ -17,6 +17,8 @@ import ShopCreateProduct from './pages/shop/CreateProduct';
 import ShopAllProducts from './pages/shop/AllProducts';
 import ProductDetails from './pages/product/ProductDetails';
 import Products from './pages/product/Products';
+import BestSelling from './pages/product/BestSelling';
+import TestSocket from './pages/TestSocket';
 
 
 
@@ -58,7 +60,9 @@ function App() {
 					}
 				/>
 
+				<Route path='/test-socket' element={<TestSocket />} />
 				<Route path='/products' element={<Products />} />
+				<Route path='/best-selling' element={<BestSelling />} />
 				<Route path='/product/:id' element={<ProductDetails />} />
 
 

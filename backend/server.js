@@ -3,12 +3,24 @@ require('dotenv').config({
 });
 const app = require('./app');
 const db = require('./db/db');
+const configureSocket = require('./socket');
+const http = require('http')
 
 db.connectDatabase();
 
-const server = app.listen(process.env.PORT, () => {
+const httpServer = http.createServer(app)
+
+const server = httpServer.listen(process.env.PORT, () => {
 	console.log(`Server running at port: ${process.env.PORT}`);
 });
+
+configureSocket(httpServer)
+
+// const httpServer = http.createServer(app).listen(process.env.PORT, process.env.HOST, () => {
+// 	console.log(`Server running at port: http://${process.env.HOST}:${process.env.PORT}`);
+// })
+
+// configureSocket(httpServer)
 
 // If any unhandled exceptions then we will shut down the server
 process.on('unhandledRejection', (err) => {
