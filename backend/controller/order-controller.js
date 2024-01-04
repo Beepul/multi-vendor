@@ -1,11 +1,12 @@
 const express = require('express')
 const catchAsyncErrors = require('../middleware/catchAsyncErrors')
 const Order = require('../model/orderModel')
+const { isAuthenticated } = require('../middleware/auth')
 
 const orderRouter = express.Router()
 
-orderRouter.post('/create', catchAsyncErrors(async (req,res) => {
-    const { cart, shippingAddress, user, totalPrice, paymentInfo } = req.body;
+orderRouter.post('/create', isAuthenticated , catchAsyncErrors(async (req,res) => {
+    const { cart, shippingAddress, userId, totalPrice, paymentInfo } = req.body;
 
     //   group cart items by shopId
     const shopItemsMap = new Map();
@@ -15,6 +16,7 @@ orderRouter.post('/create', catchAsyncErrors(async (req,res) => {
       if (!shopItemsMap.has(shopId)) {
         shopItemsMap.set(shopId, []);
       }
+      item.productId = item._id;
       shopItemsMap.get(shopId).push(item);
     }
 
@@ -25,7 +27,7 @@ orderRouter.post('/create', catchAsyncErrors(async (req,res) => {
       const order = await Order.create({
         cart: items,
         shippingAddress,
-        user,
+        userId,
         totalPrice,
         paymentInfo,
       });
@@ -39,7 +41,7 @@ orderRouter.post('/create', catchAsyncErrors(async (req,res) => {
 }))
 
 orderRouter.get('/user/:userId', catchAsyncErrors(async (req,res) => {
-    const orders = await Order.find({ "userId": req.params.userId }).sort({
+    const orders = await Order.find({userId: req.params.userId }).sort({
         createdAt: -1,
     });
 

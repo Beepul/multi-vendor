@@ -4,7 +4,7 @@ const errorMiddleware = require('./middleware/error')
 const LWPError = require('./utils/error')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
-const requestMiddleware = require('./middleware/requestMiddleware')
+const morgan = require("./middleware/morgan");
 
 const app = express()
 
@@ -13,16 +13,19 @@ app.use(cors({
     credentials: true
 }))
 
+app.use(morgan.successHandler);
+app.use(morgan.errorHandler);
+
 app.use(express.json())
 app.use(cookieParser())
-
-app.use(requestMiddleware)
 
 app.use('/api/v1', appRouter)
 
 app.get('/test', (req,res) => {
     throw new LWPError('Not Found',404)
 })
+
+
 
 app.use(errorMiddleware)
 

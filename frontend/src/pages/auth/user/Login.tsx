@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { AiOutlineEye } from "react-icons/ai";
 import { AiOutlineEyeInvisible } from "react-icons/ai";
 import styles from "../../../styles";
@@ -8,6 +8,7 @@ import { AppDispatch, RootState } from "../../../redux/store";
 import { loginAsync } from "../../../redux/actions/user";
 import { toast } from "react-toastify";
 import { AxiosError } from "axios";
+import Loader from "../../../components/Loader";
 
 
 const Login = () => {
@@ -19,27 +20,35 @@ const Login = () => {
   const dispatch = useDispatch<AppDispatch>()
   const navigate = useNavigate()
 
-  const {isAuthenticated, user} = useSelector((state: RootState) => state.user)
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || "/";
+
+  console.log("from::",from)
+
+  const {isAuthenticated, user, loading} = useSelector((state: RootState) => state.user)
 
   useEffect(() => {
-    console.log("I am here");
     if (isAuthenticated && user) {
-      console.log("I am here inside");
-      navigate("/");
+      navigate(from);
     }
-  }, [isAuthenticated, user, navigate]);
+  }, [from,isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: {preventDefault: () => void}) => {
     e.preventDefault()
     try {
       await dispatch(loginAsync({email, password, rememberMe}))
       toast.success('Login Success')
-      navigate('/')
+      navigate(from)
     } catch (error: unknown) {
       const axiosError = error as AxiosError
       toast.error(axiosError.message || 'An Internal Server Error')
       console.log(error)
     }
+  }
+
+  if(loading === 'pending'){
+    return <Loader />
   }
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

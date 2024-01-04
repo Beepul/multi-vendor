@@ -19,7 +19,7 @@ const initialState: UserState = {
 	isAuthenticated: false,
 	error: null,
 	user: null,
-	cart: [],
+	cart: JSON.parse(localStorage.getItem("user_cart") || "[]"),
 };
 
 const userSlice = createSlice({
@@ -29,27 +29,27 @@ const userSlice = createSlice({
 		addToCart: (state, action) => {
 			const cartProduct: CartProduct = action.payload
 			
-			const existingProduct = state.cart.find((item) => item._id === cartProduct._id)
+			const isItemExist = state.cart.find((i) => i._id === cartProduct._id);
 
-			const newCart = state.cart.map((product) => {
-				return product._id === existingProduct?._id ? cartProduct : product
-			})
-
-			if(existingProduct){
-				return {
-					...state,
-					cart: newCart
-				}
-			}else{
-				return {
-					...state,
-					cart: [...state.cart, cartProduct]
-				}
-			}
+			if (isItemExist) {
+				state.cart = state.cart.map((existingCartProduct) =>
+				  existingCartProduct._id === isItemExist._id
+					? cartProduct
+					: existingCartProduct
+				);
+			  } else {
+				state.cart = [...state.cart, cartProduct];
+			  }
+			  localStorage.setItem("user_cart", JSON.stringify(state.cart));
 		},
 		removeFromCart: (state, action) => {
 			state.cart = state.cart.filter((cart) => cart._id !== action.payload)
-		}
+			localStorage.setItem("user_cart", JSON.stringify(state.cart));
+		},
+		emptyCart: (state) => {
+			state.cart = [];
+			localStorage.setItem("user_cart", JSON.stringify(state.cart));
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -95,6 +95,7 @@ const userSlice = createSlice({
 			})
 			.addCase(autoLoginAsync.pending, (state) => {
 				state.loading = 'pending'
+				state.error = null;
 			})
 			.addCase(autoLoginAsync.fulfilled, (state, action) => {
 				// console.log(action.payload.user)
@@ -110,6 +111,6 @@ const userSlice = createSlice({
 	}
 });
 
-export const { addToCart, removeFromCart} = userSlice.actions;
+export const { addToCart, removeFromCart, emptyCart} = userSlice.actions;
 
 export default userSlice;

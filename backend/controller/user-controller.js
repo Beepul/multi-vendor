@@ -16,7 +16,7 @@ const createActivationToken = (userData) => {
 
 userRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
     try {
-        const {name,email,password} = req.body
+        const {name,email,phoneNumber,password} = req.body
     
         if(!name){
             return next(new LWPError('Name cannot be empty', 401))
@@ -49,7 +49,7 @@ userRouter.post('/create', catchAsyncErrors(async (req,res,next) => {
 
         const hashedPassword = await hashPassword(password)
     
-        const activationToken = createActivationToken({name,email,password: hashedPassword})
+        const activationToken = createActivationToken({name,email,password: hashedPassword,phoneNumber})
     
         const activationUrl = `http://localhost:5173/activation/${activationToken}`;
         await sendEmail({
@@ -78,7 +78,7 @@ userRouter.get('/activation/:token', catchAsyncErrors( async (req,res,next) => {
 
         // console.log('From activation',token)
     
-        const { name, email, password } = jwt.verify(token, process.env.JWT_SECRET);
+        const { name, email, password, phoneNumber } = jwt.verify(token, process.env.JWT_SECRET);
     
         // Email validation
         // Check if the email is valid or not
@@ -97,7 +97,7 @@ userRouter.get('/activation/:token', catchAsyncErrors( async (req,res,next) => {
             return next(new LWPError('User with the provided email already exists', 401))
         }
     
-        const userCreated = await UserModel.create({ name, email, password });
+        const userCreated = await UserModel.create({ name, email, password, phoneNumber });
     
         sendToken(userCreated, 201, res)
     } catch (error) {

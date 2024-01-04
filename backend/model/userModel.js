@@ -17,6 +17,9 @@ const UserSchema = new mongoose.Schema({
     minLength: [4, "Password should be greater than 4 characters"],
     select: false,
   },
+  phoneNumber: {
+    type: String,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),

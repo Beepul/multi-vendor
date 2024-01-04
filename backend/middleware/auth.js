@@ -29,7 +29,7 @@ exports.isAuthenticated = catchAsyncErrors(async (req,res,next) => {
         
     } catch (error) {
         res.clearCookie('token')
-        return next(new LWPError('Invalid token! You are not authorized to access this resources', 403))
+        return next(new LWPError('Invalid token! You are not authorized to access this resources', 401))
     }
 })
 

@@ -28,7 +28,9 @@ const productSlice = createSlice({
             })
             .addCase(createProductAsync.fulfilled, (state, action) => {
                 state.loading ='succeeded'
-                state.products = [action.payload.product, ...state.products ]
+                const updatedProductList = state.products;
+                updatedProductList.unshift(action.payload.product);
+                state.products = updatedProductList;
             })
             .addCase(createProductAsync.rejected, (state, action) => {
                 state.loading = 'failed'
