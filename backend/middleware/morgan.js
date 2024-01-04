@@ -25,5 +25,5 @@ const errorHandler = morgan(errorResponseFormat, {
 module.exports = {
   successHandler,
   errorHandler,
-  errorLogger
+  // errorLogger
 };
