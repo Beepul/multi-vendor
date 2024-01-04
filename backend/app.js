@@ -22,7 +22,7 @@ app.use(cookieParser())
 app.use('/api/v1', appRouter)
 
 app.get('/test', (req,res) => {
-    throw new LWPError('Not Found',404)
+    res.send('Multi vendor working')
 })
 
 
